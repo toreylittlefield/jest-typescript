@@ -21,16 +21,17 @@ const countryExtractor = (countriesObject) => {
   return countriesArray;
 };
 
-const countryListLookup = async (alpha2Code, handleResponse) => {
+const countryListLookup = async (alpha2Code, callback) => {
   try {
     const res = await httpRequest(alpha2Code);
-    handleResponse(res.data);
+    if (callback) {
+      return callback(res.data);
+    }
+    return countryExtractor(res.data);
   } catch (error) {
     return console.error(error);
   }
 };
-
-countryListLookup('ita', console.log);
 
 const getResponse = (language, listOfPlaces) => {
   return `${capitalize(language)} is spoken in ${listOfPlaces.length} countries around the world`;
